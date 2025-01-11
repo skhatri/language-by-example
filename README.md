@@ -8,22 +8,26 @@ Check if a planet has moons. If it has no moons, print "<Planet> has no moons."
 Mercury has no moons.
 
 ```
-const planet = {name: "Mercury", moons: 0}
-if (planet.moons === 0) {
-    console.log(`${planet.name} has no moons.`)
+{
+  const planet = {name: "Mercury", moons: 0}
+  if (planet.moons === 0) {
+      console.log(`${planet.name} has no moons.`)
+  }
 }
 ```
 
 #### If, Else If, Else
 Categorise a planet by its type. 
 ```
-const planet = { name: "Jupiter", type: "gas giant" };
-if (planet.type === "terrestrial") {
-  console.log(`${planet.name} is a terrestrial planet.`);
-} else if (planet.type === "gas giant") {
-  console.log(`${planet.name} is a gas giant.`);
-} else {
-  console.log(`${planet.name} is another type of planet.`);
+{
+  const planet = { name: "Jupiter", type: "gas giant" };
+  if (planet.type === "terrestrial") {
+    console.log(`${planet.name} is a terrestrial planet.`);
+  } else if (planet.type === "gas giant") {
+    console.log(`${planet.name} is a gas giant.`);
+  } else {
+    console.log(`${planet.name} is another type of planet.`);
+  }
 }
 ```
 
@@ -31,24 +35,27 @@ if (planet.type === "terrestrial") {
 Find a planet's nickname
 
 ```
-const planet = "Mars";
-let nickname: string;
+{
+  const planet = "Mars";
+  let nickname: string;
 
-switch (planet) {
-  case "Earth":
-    nickname = "The Blue Planet";
-    break;
-  case "Mars":
-    nickname = "The Red Planet";
-    break;
-  case "Jupiter":
-    nickname = "The Gas Giant";
-    break;
-  default:
-    nickname = "No nickname available";
+  switch (planet) {
+    case "Earth":
+      nickname = "The Blue Planet";
+      break;
+    case "Mars":
+      nickname = "The Red Planet";
+      break;
+    case "Jupiter":
+      nickname = "The Gas Giant";
+      break;
+    default:
+      nickname = "No nickname available";
+  }
+  console.log(`${planet} is known as ${nickname}.`);
 }
-console.log(`${planet} is known as ${nickname}.`);
 ```
+Try removing break after Mars. Also keep removing break in Jupiter as well.
 
 #### For Loop
 Print all planet names in the solar system.
