@@ -1,0 +1,149 @@
+{
+
+    class Planet {
+        name: string;
+        type: string;
+        moons: number;
+        orbitDuration: number;
+        nickname: string;
+        tilt: number;
+        distanceFromSun: number; // in million km
+        diameter: number; // in km
+      
+        constructor(
+          name: string,
+          type: string,
+          moons: number,
+          orbitDuration: number,
+          nickname: string,
+          tilt: number,
+          distanceFromSun: number,
+          diameter: number
+        ) {
+          this.name = name;
+          this.type = type;
+          this.moons = moons;
+          this.orbitDuration = orbitDuration;
+          this.nickname = nickname;
+          this.tilt = tilt;
+          this.distanceFromSun = distanceFromSun;
+          this.diameter = diameter;
+        }
+      
+        describe(): string {
+          return `${this.name} is a ${this.type} planet, known as "${this.nickname}". It has ${this.moons} moon(s) and orbits the Sun in ${this.orbitDuration} days.`;
+        }
+      
+        lightTravelTime(): string {
+          const speedOfLight = 299792; // km/s
+          const time = this.distanceFromSun * 1_000_000 / speedOfLight;
+          return `Light takes about ${time.toFixed(2)} seconds to reach ${this.name}.`;
+        }
+      }
+      
+      class SolarSystem {
+        private planets: Planet[] = [];
+      
+        addPlanet(planet: Planet): void {
+          this.planets.push(planet);
+        }
+      
+        listPlanets(): void {
+          this.planets.forEach(planet => console.log(planet.describe()));
+        }
+      
+        findPlanetByName(name: string): Planet | undefined {
+          return this.planets.find(planet => planet.name === name);
+        }
+      
+        sortPlanets(by: "name" | "distance"): Planet[] {
+          return [...this.planets].sort((a, b) => {
+            if (by === "name") {
+              return a.name.localeCompare(b.name);
+            } else {
+              return a.distanceFromSun - b.distanceFromSun;
+            }
+          });
+        }
+      
+        comparePlanetsByVolume(planet1Name: string, planet2Name: string): string {
+          const planet1 = this.findPlanetByName(planet1Name);
+          const planet2 = this.findPlanetByName(planet2Name);
+      
+          if (!planet1 || !planet2) {
+            return "One or both planets not found.";
+          }
+      
+          const volume1 = (4 / 3) * Math.PI * Math.pow(planet1.diameter / 2, 3);
+          const volume2 = (4 / 3) * Math.PI * Math.pow(planet2.diameter / 2, 3);
+      
+          const fits = volume1 > volume2 ? (volume1 / volume2).toFixed(2) : (volume2 / volume1).toFixed(2);
+      
+          if (volume1 > volume2) {
+            return `${planet2.name} can fit approximately ${fits} times inside ${planet1.name}.`;
+          } else {
+            return `${planet1.name} can fit approximately ${fits} times inside ${planet2.name}.`;
+          }
+        }
+      
+        findNearestNeighbor(planetName: string): string {
+        const planet = this.findPlanetByName(planetName);
+      
+        if (!planet) {
+          return "Planet not found.";
+        }
+      
+        const nearest = this.planets
+          .filter(p => p.name !== planetName)
+          .reduce((closest, current) => {
+            const currentDistance = Math.abs(current.distanceFromSun - planet.distanceFromSun);
+            const closestDistance = Math.abs(closest.distanceFromSun - planet.distanceFromSun);
+            return currentDistance < closestDistance ? current : closest;
+          });
+      
+        return `The nearest neighbor to ${planet.name} is ${nearest.name}, located ${Math.abs(nearest.distanceFromSun - planet.distanceFromSun).toFixed(1)} million km away.`;
+        }
+      
+      }
+
+      
+
+
+      const solarSystem = new SolarSystem();
+
+      // Add all Planets
+      solarSystem.addPlanet(new Planet("Mercury", "terrestrial", 0, 88, "Swift Planet", 0.03, 57.91, 4879));
+      solarSystem.addPlanet(new Planet("Venus", "terrestrial", 0, 225, "Morning Star", 177.4, 108.2, 12104));
+      solarSystem.addPlanet(new Planet("Earth", "terrestrial", 1, 365, "The Blue Planet", 23.5, 149.6, 12742));
+      solarSystem.addPlanet(new Planet("Mars", "terrestrial", 2, 687, "The Red Planet", 25.2, 227.9, 6779));
+      solarSystem.addPlanet(new Planet("Jupiter", "gas giant", 79, 4333, "The Gas Giant", 3.1, 778.5, 139820));
+      solarSystem.addPlanet(new Planet("Saturn", "gas giant", 83, 10759, "The Ringed Planet", 26.7, 1434, 116460));
+      solarSystem.addPlanet(new Planet("Uranus", "ice giant", 27, 30687, "The Sideways Planet", 97.8, 2871, 50724));
+      solarSystem.addPlanet(new Planet("Neptune", "ice giant", 14, 60190, "The Windy Planet", 28.3, 4495, 49244));
+      solarSystem.addPlanet(new Planet("Pluto", "dwarf planet", 5, 90560, "The Icy Dwarf", 122.5, 5906.4, 2376));
+      
+      // List all Planets
+      console.log("\nAll Planets:");
+      solarSystem.listPlanets();
+      
+      // Sort Planets by Name
+      console.log("\nPlanets Sorted by Name:");
+      solarSystem.sortPlanets("name").forEach(planet => console.log(planet.name));
+      
+      // Sort Planets by Distance from the Sun
+      console.log("\nPlanets Sorted by Distance from Sun:");
+      solarSystem.sortPlanets("distance").forEach(planet => console.log(`${planet.name}: ${planet.distanceFromSun} million km`));
+      
+      // Compare Planets by Volume
+      console.log("\nVolume Comparison:");
+      console.log(solarSystem.comparePlanetsByVolume("Earth", "Mars")); // How many Mars can fit in Earth
+      console.log(solarSystem.comparePlanetsByVolume("Jupiter", "Earth")); // How many Earths can fit in Jupiter
+      console.log(solarSystem.comparePlanetsByVolume("Saturn", "Mercury")); // How many Mercurys can fit in Saturn
+      
+      console.log("\nNearest Neighbor:");
+      console.log(solarSystem.findNearestNeighbor("Earth")); // Closest planet to Earth
+      console.log(solarSystem.findNearestNeighbor("Mars")); // Closest planet to Mars      
+
+      console.log("How many earths can fit inside Jupiter");
+      console.log(solarSystem.comparePlanetsByVolume("Jupiter", "Earth")); // How many Earths can fit in Jupiter      
+}
